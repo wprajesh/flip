@@ -118,7 +118,7 @@ function strposa($haystack, $needles=array(), $offset=0) {
 }
 
 $image_ex_list = array('.png','.jpg','.gif');
-$req_plist = $_GET['plist'];
+$req_plist = (isset($_GET['plist'])) ? $_GET['plist'] : '1001';
 $out = '';
 ?>
 
