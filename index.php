@@ -143,10 +143,16 @@ $out = '';
 </div>
     <div id="nav">
         <div id="prev">
-            PREV
+            <i class="fa fa-backward fa-lg"></i>
+        </div>
+        <div id="pause">
+            <i class="fa fa-pause fa-lg"></i>
+        </div>
+        <div id="play">
+            <i class="fa fa-play fa-lg"></i>
         </div>
         <div id="next">
-            NEXT
+            <i class="fa fa-forward fa-lg"></i>
         </div>
     </div>
 
@@ -226,10 +232,15 @@ $out = '';
         }
 
         window.onPlayerReady = function(e) {
+          if(typeof window.orientation == 'undefined'){
+            console.log('mobile');
+              player.playVideo();
+          }else{
             resize();
             if (options.mute) e.target.mute();
             e.target.seekTo(options.start);
             e.target.playVideo();
+          }
         }
 
 //        window.onPlayerStateChange = function(state) {
@@ -486,6 +497,24 @@ $("#men_grid").click(function(){
     console.log(current);  
 },3000);
 */
+
+jQuery('#pause').click(function(){
+
+    jQuery(this).hide();
+    $('#play').show();
+    player.pauseVideo();
+
+});
+
+ 
+jQuery('#play').click(function(){
+
+    jQuery(this).hide();
+    $('#pause').show();
+    player.playVideo();
+
+});
+
   });
 
 })(jQuery, window);

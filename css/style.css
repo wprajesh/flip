@@ -65,8 +65,8 @@ background-color: #888;
 	border-radius: 15px;
 	margin-top:10px; 
 }
-#wrapper,#tubular-container{
-	margin-top:25px;
+#tubular-container{
+	margin-top:45px;
 }
 #main_top{
 	height:50px;
@@ -81,4 +81,16 @@ background-color: #888;
 	color: white;
 	position: absolute;
 	cursor: pointer;
+}
+
+#prev{
+	text-align:center;
+}
+
+#pause,#play,#next{
+	margin-top:10px;
+	text-align:center;
+}
+#play{
+	display: none;
 }
