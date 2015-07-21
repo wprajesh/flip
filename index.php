@@ -219,11 +219,11 @@ $out = '';
                 width: options.width,
                 height: Math.ceil(options.width / options.ratio),
                 videoId: options.videoId,
-                playerVars: {
-                    controls: 0,
-                    showinfo: 0
-
-                },
+//                playerVars: {
+//                    controls: 0,
+//                    showinfo: 0
+//
+//                },
                 events: {
 //                    'onReady': onPlayerReady,
                     'onStateChange': onPlayerStateChange
