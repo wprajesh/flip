@@ -158,7 +158,7 @@ $out = '';
 
   
 
-  <script src="js/jquery.tubular.1.0.js"></script>
+<!--  <script src="js/jquery.tubular.1.0.js"></script>-->
   
       <script type="text/javascript" >
     
