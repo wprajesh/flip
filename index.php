@@ -234,6 +234,7 @@ $out = '';
 
         window.onPlayerReady = function(e) {
             e.preventDefault();
+
           if(typeof window.orientation == 'undefined'){
             console.log('mobile');
              // player.playVideo();
