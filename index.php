@@ -235,7 +235,7 @@ $out = '';
         window.onPlayerReady = function(e) {
           if(typeof window.orientation == 'undefined'){
             console.log('mobile');
-              player.playVideo();
+             // player.playVideo();
              // player.loadVideoById('wMOpMka6PJI');
           }else{
             resize();
