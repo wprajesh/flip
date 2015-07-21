@@ -136,11 +136,11 @@ $out = '';
         <input id="searchty" type="text" value="" placeholder="SEARCH"/>
     </div>
     </div>
-<div id="wrapper">
+<!--<div id="wrapper">
 <div id="s_image">
 
 </div>
-</div>
+</div>-->
     <div id="nav">
         <div id="prev">
             <i class="fa fa-backward fa-lg"></i>
@@ -209,7 +209,7 @@ $out = '';
 
         // set up css prereq's, inject tubular container and set up wrapper defaults
         $('html,body').css({'width': '100%', 'height': '100%'});
-        $body.append(tubularContainer);
+        $body.prepend(tubularContainer);
         $node.css({position: 'fixed'});
 
         // set up iframe player, use global scope so YT api can talk
