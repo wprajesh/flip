@@ -221,9 +221,8 @@ $out = '';
                 videoId: options.videoId,
                 playerVars: {
                     controls: 0,
-                    showinfo: 0,
-                    modestbranding: 1,
-                    wmode: 'transparent'
+                    showinfo: 0
+
                 },
                 events: {
 //                    'onReady': onPlayerReady,
