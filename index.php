@@ -226,7 +226,7 @@ $out = '';
                     wmode: 'transparent'
                 },
                 events: {
-                    'onReady': onPlayerReady,
+//                    'onReady': onPlayerReady,
                     'onStateChange': onPlayerStateChange
                 }
             });
