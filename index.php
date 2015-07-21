@@ -204,7 +204,7 @@ $out = '';
             $node = $(node); // cache wrapper node
 
         // build container
-        var tubularContainer = '<div id="tubular-container" style="overflow: hidden; position: fixed; z-index: 1; width: 100%; height: 100%"><div id="tubular-player" style="position: absolute"></div></div><div id="tubular-shield" style="width: 100%; height: 100%; z-index: 2; position: absolute; left: 0; top: 0;"></div>';
+        var tubularContainer = '<div id="tubular-container" style="overflow: hidden; position: fixed; z-index: 1; width: 100%; height: 100%"><div id="tubular-player" style="position: absolute"></div></div>';
 
         // set up css prereq's, inject tubular container and set up wrapper defaults
         $('html,body').css({'width': '100%', 'height': '100%'});
@@ -234,7 +234,7 @@ $out = '';
         window.onPlayerReady = function(e) {
           if(typeof window.orientation == 'undefined'){
             console.log('mobile');
-             // player.playVideo();
+              player.playVideo();
              // player.loadVideoById('wMOpMka6PJI');
           }else{
             resize();
@@ -479,7 +479,7 @@ player.playVideo();
 
 
 $('#wrapper').tubular({videoId: play_list[0].video_id});
-player.playVideo();
+
 
 $("#searchty").val(current.question);
 
