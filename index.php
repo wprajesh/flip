@@ -8,9 +8,10 @@
   <meta name="description" content="Flip Videos for Kids">
   <meta name="author" content="RajeshK">
 
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <script src="js/jquery-2.1.3.js"></script>
+  <script src="js/bootstrap.min.js"></script>
 
   <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -18,6 +19,36 @@
 </head>
 
 <body>
+    
+    <div class="container-fluid" style="padding: 0px !important;">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="conrainer">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Flips</a>
+                
+            </div>
+                <div id="navbar" class="navbar-collapse collapse">
+<!--            <ul class="nav navbar-nav">
+                <li>
+                    <input type="text" placeholder="SEARCH">
+                </li>
+            </ul>-->
+
+                  <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+            </div>
+            </div>
+        </nav>
+        <div class="row" id="player-wrap" style="width:100%;height:100%; position:fixed; overflow: hidden; margin:0px;">
+            <div id="yt-player" class="col-md-12">
+                
+            </div>
+        </div>
+    </div>
 
     <?php
 $play_list = array(
@@ -122,211 +153,8 @@ $req_plist = (isset($_GET['plist'])) ? $_GET['plist'] : '1001';
 $out = '';
 ?>
 
-    <div id="main_top">
-<div id="menu"><ul>
-<li>Home</li>
-<li>Add Child</li>
-<li>Favourites</li>
-</ul>
-</div>
-<div id="men_grid">
-    <i class="fa fa-align-justify fa-2x"></i>
-</div>
-        <div id="search">
-        <input id="searchty" type="text" value="" placeholder="SEARCH"/>
-    </div>
-    </div>
-<!--<div id="wrapper">
-<div id="s_image">
-
-</div>
-</div>-->
-    <div id="nav">
-        <div id="prev">
-            <i class="fa fa-backward fa-lg"></i>
-        </div>
-        <div id="pause">
-            <i class="fa fa-pause fa-lg"></i>
-        </div>
-        <div id="play">
-            <i class="fa fa-play fa-lg"></i>
-        </div>
-        <div id="next">
-            <i class="fa fa-forward fa-lg"></i>
-        </div>
-    </div>
-
-  
-
-<!--  <script src="js/jquery.tubular.1.0.js"></script>-->
   
       <script type="text/javascript" >
-    
-        
-        /* jQuery tubular plugin
-|* by Sean McCambridge
-|* http://www.seanmccambridge.com/tubular
-|* version: 1.0
-|* updated: October 1, 2012
-|* since 2010
-|* licensed under the MIT License
-|* Enjoy.
-|* 
-|* Thanks,
-|* Sean */
-
-;(function ($, window) {
-
-    // test for feature support and return if failure
-    
-    // defaults
-    var defaults = {
-        ratio: 16/9, // usually either 4/3 or 16/9 -- tweak as needed
-        videoId: 'ZCAnLxRvNNc', // toy robot in space is a good default, no?
-        mute: false,
-        repeat: true,
-        width: $(window).width(),
-        wrapperZIndex: 99,
-        playButtonClass: 'tubular-play',
-        pauseButtonClass: 'tubular-pause',
-        muteButtonClass: 'tubular-mute',
-        volumeUpClass: 'tubular-volume-up',
-        volumeDownClass: 'tubular-volume-down',
-        increaseVolumeBy: 10,
-        start: 0
-    };
-
-    // methods
-
-    var tubular = function(node, options) { // should be called on the wrapper div
-        var options = $.extend({}, defaults, options),
-            $body = $('body') // cache body node
-            $node = $(node); // cache wrapper node
-
-        // build container
-        var tubularContainer = '<div id="tubular-container" style="overflow: show; position: fixed; z-index: 1; width: 100%; height: 100%"><div id="tubular-player" style="position: absolute"></div></div>';
-        var tubularContainer = '<div id="tubular-container" style="overflow: show; position: fixed; z-index: 1; width: 50%; height: 50%"><div id="tubular-player" style="position: absolute"></div></div>';
-
-        // set up css prereq's, inject tubular container and set up wrapper defaults
-        $('html,body').css({'width': '100%', 'height': '100%'});
-        $body.prepend(tubularContainer);
-        $node.css({position: 'fixed'});
-
-        // set up iframe player, use global scope so YT api can talk
-        window.player;
-        window.onYouTubeIframeAPIReady = function() {
-            player = new YT.Player('tubular-player', {
-                width: options.width,
-                height: Math.ceil(options.width / options.ratio),
-                videoId: options.videoId,
-//                playerVars: {
-//                    controls: 0,
-//                    showinfo: 0
-//
-//                },
-                events: {
-//                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
-
-        window.onPlayerReady = function(e) {
-            e.preventDefault();
-
-          if(typeof window.orientation == 'undefined'){
-            console.log('mobile');
-             // player.playVideo();
-             // player.loadVideoById('wMOpMka6PJI');
-          }else{
-            resize();
-            if (options.mute) e.target.mute();
-            e.target.seekTo(options.start);
-            e.target.playVideo();
-          }
-        }
-
-//        window.onPlayerStateChange = function(state) {
-//            if (state.data === 0 ) { // video ended and repeat option is set true
-//                //player.seekTo(options.start); // restart
-//                
-//            }
-//        }
-
-//function onPlayerStateChange(event) {        
-//    if(event.data === 0) {  
-//    console.log('event');          
-//    player.cueVideoById('6YnVOsmfBQU');
-//    player.playVideo();
-//    }
-//}
-
-        // resize handler updates width, height and offset of player after resize/init
-        var resize = function() {
-            var width = $(window).width(),
-                pWidth, // player width, to be defined
-                height = $(window).height(),
-                pHeight, // player height, tbd
-                $tubularPlayer = $('#tubular-player');
-
-            // when screen aspect ratio differs from video, video must center and underlay one dimension
-
-            if (width / options.ratio < height) { // if new video height < window height (gap underneath)
-                pWidth = Math.ceil(height * options.ratio); // get new player width
-                $tubularPlayer.width(pWidth).height(height).css({left: (width - pWidth) / 2, top: 0}); // player width is greater, offset left; reset top
-            } else { // new video width < window width (gap to right)
-                pHeight = Math.ceil(width / options.ratio); // get new player height
-                $tubularPlayer.width(width).height(pHeight).css({left: 0, top: (height - pHeight) / 2}); // player height is greater, offset top; reset left
-            }
-
-        }
-
-        // events
-        $(window).on('resize.tubular', function() {
-            resize();
-        })
-
-        $('body').on('click','.' + options.playButtonClass, function(e) { // play button
-            e.preventDefault();
-            player.playVideo();
-        }).on('click', '.' + options.pauseButtonClass, function(e) { // pause button
-            e.preventDefault();
-            player.pauseVideo();
-        }).on('click', '.' + options.muteButtonClass, function(e) { // mute button
-            e.preventDefault();
-            (player.isMuted()) ? player.unMute() : player.mute();
-        }).on('click', '.' + options.volumeDownClass, function(e) { // volume down button
-            e.preventDefault();
-            var currentVolume = player.getVolume();
-            if (currentVolume < options.increaseVolumeBy) currentVolume = options.increaseVolumeBy;
-            player.setVolume(currentVolume - options.increaseVolumeBy);
-        }).on('click', '.' + options.volumeUpClass, function(e) { // volume up button
-            e.preventDefault();
-            if (player.isMuted()) player.unMute(); // if mute is on, unmute
-            var currentVolume = player.getVolume();
-            if (currentVolume > 100 - options.increaseVolumeBy) currentVolume = 100 - options.increaseVolumeBy;
-            player.setVolume(currentVolume + options.increaseVolumeBy);
-        })
-    }
-
-    // load yt iframe js api
-
-    var tag = document.createElement('script');
-    tag.src = "//www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    // create plugin
-
-    $.fn.tubular = function (options) {
-        return this.each(function () {
-            if (!$.data(this, 'tubular_instantiated')) { // let's only run one
-                $.data(this, 'tubular_instantiated', 
-                tubular(this, options));
-            }
-        });
-    }
-    
     
     
     
@@ -361,170 +189,74 @@ echo rtrim($out, ",");
 ?>];
   
   
-  
-  
-  
-      var play_list_seq = [0,1,2,3];
+</script>
 
-    function nextItem(num) { 
-  return play_list[($.inArray(num, play_list) + 1) % play_list.length]; 
-}
-function prevItem(num) { 
-  return play_list[($.inArray(num, play_list) - 1 + play_list.length) % play_list.length];
-}  
-var current = "0Bmhjf0rKe8";
-var Ninterval = {interval:[]};
-current = nextItem(current);
+<script>
+        alert($(window).height());
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
 
-  // when video ends
-function onPlayerStateChange(event) {        
-    if(event.data === 0) {  
-    console.log('event');
-    current = nextItem(current);
-    console.log(current);
-    if(current.type == 'video'){
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('yt-player', {
+          
+          width: $(window).width(),
+          height: Math.ceil($(window).width() / (16/9)),
+          videoId: 'M7lc1UVf-VE',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        event.target.playVideo();
+        resize();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          setTimeout(stopVideo, 6000);
+          done = true;
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+      
+      
+              var resize = function() {
+            var width = $(window).width(),
+                pWidth, // player width, to be defined
+                height = $(window).height(),
+                pHeight, // player height, tbd
+                $tubularPlayer = $('#yt-player');
+            // when screen aspect ratio differs from video, video must center and underlay one dimension
+            if ((width / 1.7) < height) { // if new video height < window height (gap underneath)
+                pWidth = Math.ceil(height * 1.7); // get new player width
+                $tubularPlayer.width(pWidth).height(height).css({left: (width - pWidth) / 2, top: 0}); // player width is greater, offset left; reset top
+            } else { // new video width < window width (gap to right)
+                pHeight = Math.ceil(width / 1.7); // get new player height
+                console.log('Hooray');
+                console.log(height);
+                console.log(pHeight);
+                $tubularPlayer.width(width).height(pHeight).css({padding:0,left: 0, top: (height - pHeight) / 2}); // player height is greater, offset top; reset left
+                
+            }
+        }
         
-      console.log(current.video_id);
-player.cueVideoById(current.video_id);
-player.playVideo();
-    }else{
-      show_image();
-    }
-    // next = nextItem(next);
-   // console.log(next);          
-   // player.cueVideoById('6YnVOsmfBQU');
-   // player.playVideo();
-    }
-}
-
-
-function show_image(){
-  $('#tubular-container').hide();
-  var current_img_url = current.img_url;
-  var img = '<img src="'+current_img_url+' " />';
-  $('#s_image').html(img);
-  $('#s_image').show();
-  Ninterval.interval.push(
-   setInterval(function(){
-
-check_type_play(); 
-},4000)
-);
-    $("#searchty").val(current.question);
-}
-
-
-function check_type_play(){
-current = nextItem(current);
-    for (var i=0; i < Ninterval.interval.length; i++) {
-        clearInterval(Ninterval.interval[i]);
-    }
-    if(current.type == 'video'){
-       // clearInterval(Ninterval.interval);
-        $('#tubular-container').show();
-        $('#s_image').hide();
-      console.log(current.video_id);
-player.cueVideoById(current.video_id);
-player.playVideo();
-    }else{
-      show_image();
-    }
-    
-    $("#searchty").val(current.question);
-}
-
-$("#prev").click(function(){
-    current = prevItem(current);
-    for (var i=0; i < Ninterval.interval.length; i++) {
-        clearInterval(Ninterval.interval[i]);
-    }
-    if(current.type == 'video'){
-       // console.log(Ninterval.interval);
-       // clearInterval(Ninterval.interval);
-        $('#tubular-container').show();
-        $('#s_image').hide();
-      console.log(current.video_id);
-player.cueVideoById(current.video_id);
-player.playVideo();
-    }else{
-       // clearInterval(Ninterval.interval);
-      show_image();
-    }
-    $("#searchty").val(current.question);
-});
-
-$("#next").click(function(){
-    current = nextItem(current);
-        for (var i=0; i < Ninterval.interval.length; i++) {
-        clearInterval(Ninterval.interval[i]);
-    }
-    if(current.type == 'video'){
-        //console.log(Ninterval.interval);
-       // clearInterval(Ninterval.interval);
-        $('#tubular-container').show();
-        $('#s_image').hide();
-      console.log(current.video_id);
-player.cueVideoById(current.video_id);
-player.playVideo();
-    }else{
-       // clearInterval(Ninterval.interval);
-      show_image();
-    }
-    $("#searchty").val(current.question);
-});
-
-
-  $(document).ready(function(){
-
-    
-
-
-
-$('body').tubular({videoId: play_list[0].video_id});
-
-
-$("#searchty").val(current.question);
-
-$("#men_grid").click(function(){
-   if($('#menu').css('left') == '0px'){
-       $('#menu').css('left','-100%'); 
-   } else{
-      $('#menu').css('left','0px');  
-   }
-   
-});
-
-/*setInterval(function(){
-
-       current = nextItem(current);
-    console.log(current);  
-},3000);
-*/
-
-jQuery('#pause').click(function(){
-
-    jQuery(this).hide();
-    $('#play').show();
-    player.pauseVideo();
-
-});
-
- 
-jQuery('#play').click(function(){
-
-    jQuery(this).hide();
-    $('#pause').show();
-    player.playVideo();
-
-});
-
-  });
-
-})(jQuery, window);
-    
     </script>
-  <script type="text/javascript">
-
-  </script>
 </body>
 </html>
