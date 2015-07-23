@@ -17,40 +17,7 @@
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
 </head>
-
-<body>
-    
-    <div class="container-fluid" style="padding: 0px !important;">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="conrainer">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Flips</a>
-                
-            </div>
-                <div id="navbar" class="navbar-collapse collapse">
-<!--            <ul class="nav navbar-nav">
-                <li>
-                    <input type="text" placeholder="SEARCH">
-                </li>
-            </ul>-->
-
-                  <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
-            </div>
-            </div>
-        </nav>
-        <div class="row" id="player-wrap" style="width:100%;height:100%; position:fixed; overflow: hidden; margin:0px;">
-            <div id="yt-player" class="col-md-12">
-                
-            </div>
-        </div>
-    </div>
-
-    <?php
+ <?php
 $play_list = array(
   array("Junk"=>"<document>  <id>1001</id>  <playListId>1001</playListId>  <question>Where do beautiful butterflies come from?</question>  \n <description>Egg to Caterpillar to Chrysalis to beautiful Butterfly. Life is amazing and beautiful. Lets enjoy it!</description>
  <minAge>5</minAge>  <maxAge>8</maxAge>  <references>   <reference>ocWgSgMGxOc</reference>   <reference>-pHav-3QZkI</reference>   <reference>AMs3waaW75g</reference>   <reference>http://paulmirocha.com/wp/wp-content/uploads/2011/11/butterfly_lifecycle1.jpg</reference>   <reference>http://www.exploringnature.org/graphics/butterfly_cycle_color.jpg</reference>   <reference>http://www.thunderboltkids.co.za/Grade5/01-life-and-living/images/gd-0138.png</reference>   <reference>s6R5cn3DQ_o</reference>
@@ -152,14 +119,35 @@ $image_ex_list = array('.png','.jpg','.gif');
 $req_plist = (isset($_GET['plist'])) ? $_GET['plist'] : '1001';
 $out = '';
 ?>
+<body>
+    
+    <div class="container-fluid" style="padding: 0px !important;">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="conrainer">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Flips</a>
+                
+            </div>
+                <div id="navbar" class="navbar-collapse collapse">
+<!--            <ul class="nav navbar-nav">
+                <li>
+                    <input type="text" placeholder="SEARCH">
+                </li>
+            </ul>-->
 
-  
-      <script type="text/javascript" >
-    
-    
-    
-      var play_list = [    <?php
-foreach($play_list as $key => $list){
+                  <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+            </div>
+            </div>
+        </nav>
+        <div class="row" id="player-wrap" style="width:100%;height:100%; position:fixed; overflow: hidden; margin:0px;">
+            <ul id="slide" style="margin:0px;padding:0px;list-style: none;width:100%;height:100%; position:fixed; margin:0px;">
+                <?php
+                foreach($play_list as $key => $list){
  
   $play_list_id = $list['PlayListId'];
 
@@ -169,30 +157,30 @@ foreach($play_list as $key => $list){
     if(isset($list["URL".$i])){
        $current_url = $list["URL".$i];
        if (strposa($current_url, $image_ex_list)) {
-       $out = $out."{'type':'img','img_url':'".$current_url."','question':'".$list['Question']."'}";
-      //if(isset($list["URL".$i+1])){
-          $out = $out.',';
-      //}
+      // $out = $out."{'type':'img','img_url':'".$current_url."','question':'".$list['Question']."'}";
+      echo '<li data-type="img" data-video_id="'.$current_url.'" data-ques="'.$list['Question'].'"></li>';
        }else{
-      $out = $out."{'type':'video','video_id':'".$current_url."','question':'".$list['Question']."'}";  
-      
-      //if(isset($list["URL".$i+1])){
-          $out = $out.',';
-     // }
+     // $out = $out."{'type':'video','video_id':'".$current_url."','question':'".$list['Question']."'}";  
+     echo '<li data-type="video" data-video_id="'.$current_url.'" data-ques="'.$list['Question'].'"></li>';
        }
       
     }
   }
 }
 }
-echo rtrim($out, ",");
-?>];
-  
-  
-</script>
+                ?>
+            </ul>
+<div id="yt-player" class="col-md-12"></div>
+        </div>
+    </div>
 
+   
+    
+
+    
+    
 <script>
-        alert($(window).height());
+
       // 2. This code loads the IFrame Player API code asynchronously.
       var tag = document.createElement('script');
 
@@ -203,12 +191,13 @@ echo rtrim($out, ",");
       // 3. This function creates an <iframe> (and YouTube player)
       //    after the API code downloads.
       var player;
+      var aspect_rat = 16/9;
       function onYouTubeIframeAPIReady() {
         player = new YT.Player('yt-player', {
           
           width: $(window).width(),
-          height: Math.ceil($(window).width() / (16/9)),
-          videoId: 'M7lc1UVf-VE',
+          height: Math.ceil($(window).width() / aspect_rat),
+          videoId: $('ul#slide li:first-child').data('video_id'),
           events: {
             'onReady': onPlayerReady,
             'onStateChange': onPlayerStateChange
@@ -219,17 +208,53 @@ echo rtrim($out, ",");
       // 4. The API will call this function when the video player is ready.
       function onPlayerReady(event) {
         event.target.playVideo();
-        resize();
+        resize('video');
       }
 
       // 5. The API calls this function when the player's state changes.
       //    The function indicates that when playing a video (state=1),
       //    the player should play for six seconds and then stop.
-      var done = false;
+      
       function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          setTimeout(stopVideo, 6000);
-          done = true;
+        if (event.data == 0) {
+          //change item
+console.log('d');
+                  if($('ul#slide li.active').next().length){
+       
+
+       $('ul#slide li.active').removeClass('active').next().addClass('active');
+
+       
+            console.log('inter');
+        }else{
+            console.log('finale');
+            $('ul#slide li:last-child').removeClass('active');
+            $('ul#slide li:first-child').addClass('active');
+
+            
+        
+        }
+              
+      if($('ul#slide li.active').data('type') !='img'){        
+$('li.active').hide();
+$('#yt-player').show();
+player.cueVideoById($('ul#slide li.active').data('video_id'));
+player.playVideo();
+      }else{
+          $('#yt-player').hide();
+          $('li.active').show();
+          if($('li.active').html() == ''){
+            //li is empty so populate img tag
+            $('li.active').html("<img src='"+$('li.active').data('video_id')+"'/>");
+          }
+          resize('img');
+          event = {data:0};
+           setTimeout(function(){
+            onPlayerStateChange(event);   
+           },'8000');
+         // setTimeout(onPlayerStateChange(event),'3000');
+        
+      }
         }
       }
       function stopVideo() {
@@ -237,26 +262,47 @@ echo rtrim($out, ",");
       }
       
       
-              var resize = function() {
+              var resize = function(type) {
             var width = $(window).width(),
                 pWidth, // player width, to be defined
                 height = $(window).height(),
-                pHeight, // player height, tbd
+                pHeight; // player height, tbd
+                if(type != 'img'){
                 $tubularPlayer = $('#yt-player');
+                }else{
+                $tubularPlayer = $('ul#slide li.active');    
+                }
             // when screen aspect ratio differs from video, video must center and underlay one dimension
-            if ((width / 1.7) < height) { // if new video height < window height (gap underneath)
-                pWidth = Math.ceil(height * 1.7); // get new player width
+            if ((width / aspect_rat) < height) { // if new video height < window height (gap underneath)
+                pWidth = Math.ceil(height * aspect_rat); // get new player width
                 $tubularPlayer.width(pWidth).height(height).css({left: (width - pWidth) / 2, top: 0}); // player width is greater, offset left; reset top
             } else { // new video width < window width (gap to right)
-                pHeight = Math.ceil(width / 1.7); // get new player height
-                console.log('Hooray');
-                console.log(height);
-                console.log(pHeight);
+                pHeight = Math.ceil(width / aspect_rat); // get new player height
                 $tubularPlayer.width(width).height(pHeight).css({padding:0,left: 0, top: (height - pHeight) / 2}); // player height is greater, offset top; reset left
                 
             }
         }
         
     </script>
+  
+
+<style type="text/css">
+    
+    
+        
+    ul#slide li{
+        display:none !important;
+        margin:0px;padding:0px;list-style: none;width:100%;height:100%; position:fixed; margin:0px;
+    }
+    ul#slide li img{
+        width:100%;
+    }
+    
+    ul#slide li.active{
+        display: block !important;
+    }
+
+</style>
+
 </body>
 </html>
