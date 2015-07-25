@@ -10,7 +10,9 @@
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/font-awesome.min.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="js/jquery-2.1.3.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <script src="js/bootstrap.min.js"></script>
 
   <!--[if lt IE 9]>
@@ -118,59 +120,80 @@ function strposa($haystack, $needles=array(), $offset=0) {
 $image_ex_list = array('.png','.jpg','.gif');
 $req_plist = (isset($_GET['plist'])) ? $_GET['plist'] : '1001';
 $out = '';
-?>
-<body>
-    
-    <div class="container-fluid" style="padding: 0px !important;">
-        <nav class="navbar navbar-default navbar-fixed-top">
-            <div class="conrainer">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Flips</a>
-                
-            </div>
-                <div id="navbar" class="navbar-collapse collapse">
-<!--            <ul class="nav navbar-nav">
-                <li>
-                    <input type="text" placeholder="SEARCH">
-                </li>
-            </ul>-->
 
-                  <form class="navbar-form navbar-left" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
-            </div>
-            </div>
-        </nav>
-        <div class="row" id="player-wrap" style="width:100%;height:100%; position:fixed; overflow: hidden; margin:0px;">
-            <ul id="slide" style="margin:0px;padding:0px;list-style: none;width:100%;height:100%; position:fixed; margin:0px;">
-                <?php
                 foreach($play_list as $key => $list){
  
   $play_list_id = $list['PlayListId'];
-
+  $questions[] = array('value' => $list['PlayListId'],'label' => $list['Question']);
   if($play_list_id == $req_plist){
-
+$current_question = $list['Question'];
   for($i=1;$i<=10;$i++){
     if(isset($list["URL".$i])){
        $current_url = $list["URL".$i];
        if (strposa($current_url, $image_ex_list)) {
       // $out = $out."{'type':'img','img_url':'".$current_url."','question':'".$list['Question']."'}";
-      echo '<li data-type="img" data-video_id="'.$current_url.'" data-ques="'.$list['Question'].'"></li>';
+      $out = $out.'<li data-type="img" data-video_id="'.$current_url.'" data-ques="'.$list['Question'].'"></li>';
        }else{
      // $out = $out."{'type':'video','video_id':'".$current_url."','question':'".$list['Question']."'}";  
-     echo '<li data-type="video" data-video_id="'.$current_url.'" data-ques="'.$list['Question'].'"></li>';
+     $out = $out.'<li data-type="video" data-video_id="'.$current_url.'" data-ques="'.$list['Question'].'"></li>';
        }
       
     }
   }
 }
 }
+
+
+?>
+<body>
+    
+    <div class="container-fluid" style="padding: 0px !important;">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="conrainer">
+                <div class="col-md-2">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Flips</a>
+                
+            </div>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+
+<div class="container-fluid col-md-10">
+ <form class="navbar-form"   role="search">
+
+                <div class="form-group row" style="width:100%;">
+                    <div class="col-md-9">
+                    <div class="input-group" style="width:100%;">
+                      <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                      <input type="text" id="ques_search" class="form-control" value="<?php echo $current_question; ?>" style="width:100%;">
+                      <input type="hidden" id="selected_ques"  name="plist" value="<?php echo $req_plist; ?>">
+                    </div>
+                    </div>
+                    <div class="col-md-3">
+                    <button type="submit" class="btn btn-default">Go</button>
+                    </div>
+                </div>
+        
+      </form>
+</div>
+                  
+            </div>
+            </div>
+        </nav>
+        <div class="row" id="player-wrap" style="width:100%;height:100%; position:fixed; overflow: hidden; margin:0px;">
+            <ul id="slide" style="margin:0px;padding:0px;list-style: none;width:100%;height:100%; position:fixed; margin:0px;">
+                <?php
+echo $out;
                 ?>
             </ul>
 <div id="yt-player" class="col-md-12"></div>
+        </div>
+        <div id="navigation">
+            <span class="glyphicon glyphicon-backward gylph-2x" id="plist_back" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-pause gylph-2x" id="plist_pause" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-play gylph-2x" id="plist_play" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-forward gylph-2x" id="plist_forward" aria-hidden="true"></span>
+            
         </div>
     </div>
 
@@ -183,6 +206,8 @@ $out = '';
 
       // 2. This code loads the IFrame Player API code asynchronously.
       var tag = document.createElement('script');
+      
+      var timers = [];
 
       tag.src = "https://www.youtube.com/iframe_api";
       var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -234,14 +259,21 @@ console.log('d');
             
         
         }
-              
-      if($('ul#slide li.active').data('type') !='img'){        
+        play_video_r_image();      
+
+        }
+      }
+      
+      function play_video_r_image(){
+          
+              if($('ul#slide li.active').data('type') !='img'){        
 $('li.active').hide();
 $('#yt-player').show();
 player.cueVideoById($('ul#slide li.active').data('video_id'));
 player.playVideo();
       }else{
           $('#yt-player').hide();
+          player.stopVideo();
           $('li.active').show();
           if($('li.active').html() == ''){
             //li is empty so populate img tag
@@ -249,14 +281,83 @@ player.playVideo();
           }
           resize('img');
           event = {data:0};
-           setTimeout(function(){
+           var setT = setTimeout(function(){
             onPlayerStateChange(event);   
            },'8000');
+           timers.push(setT);
          // setTimeout(onPlayerStateChange(event),'3000');
         
       }
-        }
       }
+      
+      $("#plist_forward").click(function(){
+         if($('ul#slide li.active').next().length){       
+console.log($('ul#slide li.active').next());
+console.log('next is happening');
+       $('ul#slide li.active').removeClass('active').next().addClass('active');
+
+        }else{
+
+            $('ul#slide li:last-child').removeClass('active');
+            $('ul#slide li:first-child').addClass('active');
+        
+        }
+        clearAllInterval();
+        play_video_r_image();
+      });
+      
+      $("#plist_back").click(function(){
+         if($('ul#slide li.active').prev().length){       
+
+       $('ul#slide li.active').removeClass('active').prev().addClass('active');
+
+        }else{
+
+            $('ul#slide li:first-child').removeClass('active');
+            $('ul#slide li:last-child').addClass('active');
+        
+        }
+        clearAllInterval();
+        play_video_r_image();
+      });
+      
+            $("#plist_pause").click(function(){
+        $(this).hide();
+        $('#plist_play').show();
+              if($('ul#slide li.active').data('type') !='img'){        
+
+player.pauseVideo();
+      }else{
+         clearAllInterval();
+      }
+        
+      });
+      
+      $("#plist_play").click(function(){
+        $(this).hide();
+        $('#plist_pause').show();
+        
+              if($('ul#slide li.active').data('type') !='img'){        
+
+player.playVideo();
+      }else{
+         var setT = setTimeout(function(){
+            onPlayerStateChange(event);   
+           },'8000');
+           timers.push(setT);
+      }
+        
+      });
+      
+      function clearAllInterval(){
+          var length = timers.length;
+          for(var i=0;i<length; i++){
+              clearTimeout(timers[i]);
+          }
+      }
+      
+      
+      
       function stopVideo() {
         player.stopVideo();
       }
@@ -283,6 +384,26 @@ player.playVideo();
             }
         }
         
+        $(document).ready(function(){
+           $('ul#slide li:first-child').addClass('active'); 
+           
+           var availableQuest = <?php echo json_encode($questions); ?>;
+           $( "#ques_search" ).autocomplete({
+      source: availableQuest,
+   select: function(event, ui) {
+        event.preventDefault();
+        $( "#ques_search" ).val(ui.item.label);
+        $( "#selected_ques" ).val(ui.item.value);
+    },
+    focus: function(event, ui) {
+        event.preventDefault();
+        $( "#ques_search" ).val(ui.item.label);
+        $( "#selected_ques" ).val(ui.item.value);
+    }
+    });
+
+        });
+        
     </script>
   
 
@@ -301,7 +422,24 @@ player.playVideo();
     ul#slide li.active{
         display: block !important;
     }
-
+    #navigation{
+        position: fixed;
+        bottom:15px;
+        right:0px;
+        color:white;
+    }
+    #navigation span{
+        cursor: pointer;
+    }
+    #plist_play{
+        display:none;
+    }
+    .gylph-2x {
+        font-size: 2.5em;
+    }
+    .ui-autocomplete{
+        z-index: 9999999;
+    }
 </style>
 
 </body>
